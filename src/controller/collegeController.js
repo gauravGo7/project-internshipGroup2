@@ -1,4 +1,5 @@
 const collegeModel=require("../models/collegeModel")
+let internModel = require("../models/internModel")
 
 
 let createCollege=async function (req,res)  {
@@ -16,8 +17,12 @@ let createCollege=async function (req,res)  {
 
 const getCollege = async (req, res)=> {
     try{
-    let data =await collegeModel.find()
-    res.status(200).send(data)
+    let collegeName = req.query.collegeName
+    let collegeId = await collegeModel.find({name: collegeName})
+    console.log(collegeId)
+
+    // let data = await collegeModel.find()
+    // res.send(data)
     }
     catch(err){
         return res.status(400).send({status: false, msg : err.message})

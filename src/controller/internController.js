@@ -1,8 +1,9 @@
 const internModel = require("../models/internModel")
 const collegeModel= require("../models/collegeModel")
-const {isValidName} = require("../validators/validator")
+const {isValidName,isValidEmail, isValidNumber} = require("../validators/validator")
 
 
+//==========================================================CREATING INTERNS===============================================================
 
  let createIntern = async ( req , res ) => {
     try {
@@ -22,6 +23,14 @@ const {isValidName} = require("../validators/validator")
         let validName = isValidName(name)
         if(!validName)  return res.status(400).send({status:false, msg: "Name can only contain letters"})
 
+        let validEmail = isValidEmail(email)
+        if(!validEmail)  return res.status(400).send({status:false, msg:"Email is not valid"})
+
+        let validCollegeName = isValidName(collegeName)
+        if(!validCollegeName)  return res.status(400).send({status:false, msg : "College name can only contain letters"})
+
+
+         //ADDING COLLEGE ID IN DATA USING COLLEGE NAME----------------------
 
          let college = await collegeModel.find({name:collegeName})
          let collegeId = college[0]._id.toString()
@@ -33,7 +42,8 @@ const {isValidName} = require("../validators/validator")
 
         return res.status(201).send({status : true , data : createdData})
 
-    }catch(error){
+    }
+    catch(error){
         return res.status(400).send({status:false , message : error.message})
     }
 }

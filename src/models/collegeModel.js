@@ -1,4 +1,6 @@
 const mongoose=require('mongoose')
+
+
 const collegeModel=new mongoose.Schema({
     name:{
         type :String,
