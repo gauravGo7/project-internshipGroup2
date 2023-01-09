@@ -18,11 +18,11 @@ let createCollege=async function (req,res)  {
             return res.status(400).send({status:false,msg:"fullName is required"})
         }
         const newCollege=await collegeModel.create(data);
-        res.send({status:true,
+        res.status(201).send({status:true,
         data:newCollege})
     }
     catch(err){
-        return res.send({status:false,msg:err.message})
+        return res.status(500).send({status:false,msg:err.message})
     }
 }
 
@@ -30,11 +30,45 @@ let createCollege=async function (req,res)  {
 const getCollege = async (req, res)=> {
     try{
     let collegeName = req.query.collegeName
-    let collegeId = await collegeModel.find({name: collegeName})
-    console.log(collegeId)
+    let college= await collegeModel.find({name: collegeName})
 
-    // let data = await collegeModel.find()
-    // res.send(data)
+    if(!college)   return res.status(400).send({status:false, msg: "No such college exists in the DB"})
+
+    let collegeId = college[0]._id.toString()
+    let name = college[0].name
+    const fullName = college[0].fullName
+    const logo = college[0].logoLink
+
+    let interns = await internModel.find({collegeId: collegeId})
+
+    let internId = interns.map(el=>el._id)
+    let internName = interns.map(el=>el.name)
+    let email = interns.map(el=>el.email)
+    let mobile= interns.map(el=>el.mobile)
+
+    let internArr=[]
+    for(let i=0; i<internId.length; i++){
+     let el ={id :internId[i] }
+     internArr.push(el)
+    }
+    for(let i=0; i<internName.length; i++){
+       internArr[i].name = internName[i]
+    }
+    for(let i=0; i<email.length; i++){
+        internArr[i].email = email[i]
+     }
+     for(let i=0; i<mobile.length; i++){
+        internArr[i].mobile = mobile[i]
+     }
+  
+
+    let data = {}
+    data.name =name
+    data.fullName= fullName
+    data.logoLink = logo
+    data.interns = internArr
+
+    res.status(200).send(data)
     }
     catch(err){
         return res.status(400).send({status: false, msg : err.message})
