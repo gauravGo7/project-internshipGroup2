@@ -1,7 +1,7 @@
 const express = require("express")
 const router  = express.Router()
 const College = require("../controller/collegeController")
-const Intern  = require("../controller/interControllerr")
+const Intern  = require("../controller/internController")
 
 router.get("/test", (req, res)=>res.send("api"))
 

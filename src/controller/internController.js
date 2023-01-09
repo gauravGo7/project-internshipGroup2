@@ -1,12 +1,10 @@
-const internModel = require("../models/collegeModel")
+const internModel = require("../models/internModel")
 
 
 
-exports.createIntern = async ( req , res ) => {
+ let createIntern = async ( req , res ) => {
     try {
         let data = req.body
-
-        if (!data) return res.status(400).send({status:false , msg : "Please provide valid credentials"})
        
         let createdData = await internModel.create(data)
 
@@ -16,3 +14,4 @@ exports.createIntern = async ( req , res ) => {
         return res.status(500).send({status:false , message : "error.message"})
     }
 }
+module.exports.createIntern=createIntern
