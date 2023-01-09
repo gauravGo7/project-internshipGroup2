@@ -6,6 +6,7 @@ const route = require("./routes/routes.js")
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
+mongoose.set('strictQuery', true)
 mongoose.connect("mongodb+srv://anjalis1509:anjalis1509@cluster0.rhdux0p.mongodb.net/group2Database", {
     useNewUrlParser: true
 }).then(()=>console.log("MongoDb is connected"))
