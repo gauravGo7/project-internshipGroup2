@@ -1,7 +1,7 @@
 const collegeModel=require("../models/collegeModel")
 
 
-const createCollege=async function (req,res)  {
+exports.createCollege=async function (req,res)  {
     try{
         const data=req.body;
         const newCollege=await collegeModel.create(data);
@@ -12,5 +12,3 @@ const createCollege=async function (req,res)  {
         return res.send({status:false,msg:err.message})
     }
 }
-
-module.exports.createCollege=createCollege
