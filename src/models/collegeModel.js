@@ -3,11 +3,13 @@ const collegeModel=new mongoose.Schema({
     name:{
         type :String,
         required:true,
-        unique:true
+        unique:true,
+        trim:true
     },
     fullName:{
         type:String,
-        required:true
+        required:true,
+        trim:true
     },
     logoLink:{
         type:String,
