@@ -18,7 +18,6 @@
   "homepage": "https://github.com/SagarMaan/project-internshipGroup2#readme",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^6.8.3",
-    "nodemon": "^2.0.20"
+    "mongoose": "^6.8.3"
   }
 }

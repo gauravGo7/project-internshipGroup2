@@ -7,6 +7,7 @@ router.get("/test", (req, res)=>res.send("api"))
 
 
 router.post( "/functionup/colleges" , College.createCollege )
+router.get("/functionup/colleges", College.getCollege)
 router.post( "/functionup/interns" , Intern.createIntern )
 
 
