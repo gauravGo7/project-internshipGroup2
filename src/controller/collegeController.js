@@ -1,25 +1,34 @@
 const collegeModel=require("../models/collegeModel")
 let internModel = require("../models/internModel")
-const validator=require("../validators/validator")
+const {isValidName}=require("../validators/validator")
 
+//=====================================================================CREATING COLLEGES========================================================
 
 let createCollege=async function (req,res)  {
     try{
         const data=req.body;
         let {name,fullName,logoLink}=data
-        if (Object.keys(data).length==0){
-            return res.send(400).send({status:false,message:"all fields are mandatory"})
-        }
-        if (!validator.isValidName(name)){
-            return res.status(400)
-            .send({status:false,msg:"name is required"})
-        }
-        if (!validator.isValidName(fullName)){
-            return res.status(400).send({status:false,msg:"fullName is required"})
-        }
+
+        name = name.trim()
+        fullName = fullName.trim()
+        logoLink = logoLink.trim()
+
+        //CHECKING IF ALL THE FIELDS PRESENT IN THE BODY------------------------------
+        if (Object.keys(data).length==0) return res.status(400).send({status:false,message:"cannot create data without any information"})
+        if(!name)  return res.status(400).send({status:false, message : "Name is required"})
+        if(!fullName)  return res.status(400).send({status:false, message : "Full name is required"})
+        if(!logoLink)  return res.status(400).send({status:false, message : "Logo link is required"})
+
+        //VALIDATIONS USING REGEX---------------------------------------------------------
+        let validName = isValidName(name)
+        if(!validName)  return res.status(400).send({status:false, message:"name can only contain letters"})
+
+        let validFullName = isValidName(fullName)
+        if(!validFullName) return res.status(400).send({status:false, message:"Full name can only contain letters"})
+        
+        //CREATING COLLEGE----------------------------------------------------------
         const newCollege=await collegeModel.create(data);
-        res.status(201).send({status:true,
-        data:newCollege})
+        res.status(201).send({status:true,data:newCollege})
     }
     catch(err){
         return res.status(500).send({status:false,msg:err.message})
@@ -27,12 +36,14 @@ let createCollege=async function (req,res)  {
 }
 
 
+//=============================================================GETTING COLLEGES=============================================================
+
 const getCollege = async (req, res)=> {
     try{
     let collegeName = req.query.collegeName
     let college= await collegeModel.find({name: collegeName})
 
-    if(!college)   return res.status(400).send({status:false, msg: "No such college exists in the DB"})
+    if(college.length===0)   return res.status(400).send({status:false, msg: "No such college exists in the DB"})
 
     let collegeId = college[0]._id.toString()
     let name = college[0].name
@@ -40,6 +51,7 @@ const getCollege = async (req, res)=> {
     const logo = college[0].logoLink
 
     let interns = await internModel.find({collegeId: collegeId})
+    if(interns.length===0) return res.send({status:false, message:"No interns have applied for this college"})
 
     let internId = interns.map(el=>el._id)
     let internName = interns.map(el=>el.name)
