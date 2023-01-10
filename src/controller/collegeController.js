@@ -2,7 +2,7 @@ const collegeModel = require("../models/collegeModel")
 let internModel = require("../models/internModel")
 const { isValidName, isValidNames, isValidLogoLink } = require("../validators/validator")
 
-//=====================================================================CREATING COLLEGES========================================================
+//=================================================CREATING COLLEGES======================================//
 
 let createCollege = async function (req, res) {
     try {
@@ -15,6 +15,16 @@ let createCollege = async function (req, res) {
 
         //CHECKING IF ALL THE FIELDS PRESENT IN THE BODY------------------------------
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "cannot create data without any information" })
+
+         //KEY VALIDATION---------------------------------------------------------------
+         let keyArr = Object.keys(data)
+         for(let i=0;i<keyArr.length; i++){
+             keyArr[i]= keyArr[i].trim()
+             if(keyArr[i].length ===0){
+                 return res.status(400).send({status:false, message:"please provide valid key"})
+             }
+         }
+         
         if (!name) return res.status(400).send({ status: false, message: "Name is required" })
         if (!fullName) return res.status(400).send({ status: false, message: "Full name is required" })
         if (!logoLink) return res.status(400).send({ status: false, message: "Logo link is required" })

@@ -16,6 +16,16 @@ let createIntern = async (req, res) => {
 
         //CHECKING IF ALL THE FIELDS PRESENT IN THE BODY---------------------------------
         if (Object.keys(data).length === 0) return res.status(400).send({ status: false, msg: "cannot create data without any information" })
+
+         //KEY VALIDATION---------------------------------------------------------------
+         let keyArr = Object.keys(data)
+         for(let i=0;i<keyArr.length; i++){
+             keyArr[i]= keyArr[i].trim()
+             if(keyArr[i].length ===0){
+                 return res.status(400).send({status:false, message:"please provide valid key"})
+             }
+         }
+         
         if (!name) return res.status(400).send({ status: false, message: "Name is required" })
         if (!email) return res.status(400).send({ status: false, message: "Email is required" })
         if (!mobile) return res.status(400).send({ status: false, message: "Mobile number is required" })
