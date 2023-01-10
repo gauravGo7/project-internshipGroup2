@@ -18,12 +18,8 @@ const isValidNames = function (name) {
     return nameRegex.test(name)
 }
 
-const isValidLogoLink = function (logoLink) {
-    const correctLink = /^(http|https)/
-    return correctLink.test(logoLink)
-}
 
-module.exports={isValidName,isValidEmail, isValidNumber , isValidNames,isValidLogoLink}
+module.exports={isValidName,isValidEmail, isValidNumber , isValidNames}
 
 
 
