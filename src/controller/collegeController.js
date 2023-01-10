@@ -9,15 +9,28 @@ let createCollege=async function (req,res)  {
         const data=req.body;
         let {name,fullName,logoLink}=data
 
-        name = name.trim()
-        fullName = fullName.trim()
-        logoLink = logoLink.trim()
 
         //CHECKING IF ALL THE FIELDS PRESENT IN THE BODY------------------------------
-        if (Object.keys(data).length==0) return res.status(400).send({status:false,message:"cannot create data without any information"})
+        if (Object.keys(data).length==0 ) return res.status(400).send({status:false,message:"cannot create data without any information"})
+
+        //KEY VALIDATION---------------------------------------------------------------
+        let keyArr = Object.keys(data)
+        for(let i=0;i<keyArr.length; i++){
+            keyArr[i]= keyArr[i].trim()
+            if(keyArr[i].length ===0){
+                return res.status(400).send({status:false, message:"please provide valid key"})
+            }
+        }
+        
+       
         if(!name)  return res.status(400).send({status:false, message : "Name is required"})
-        if(!fullName)  return res.status(400).send({status:false, message : "Full name is required"})
+        name= name.trim()
+    
+        if(!fullName) return res.status(400).send({status:false, message : "Full name is required"})
+        fullName = fullName.trim()
+        
         if(!logoLink)  return res.status(400).send({status:false, message : "Logo link is required"})
+        logoLink = logoLink.trim()
 
         //VALIDATIONS USING REGEX---------------------------------------------------------
         let validName = isValidName(name)
@@ -41,6 +54,7 @@ let createCollege=async function (req,res)  {
 const getCollege = async (req, res)=> {
     try{
     let collegeName = req.query.collegeName
+    if(!collegeName)  return res.status(400).send({status:false, message:"Please provide collegeName in query"})
     let college= await collegeModel.find({name: collegeName})
 
     if(college.length===0)   return res.status(400).send({status:false, msg: "No such college exists in the DB"})

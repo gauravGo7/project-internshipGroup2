@@ -10,16 +10,28 @@ const {isValidName,isValidEmail, isValidNumber} = require("../validators/validat
         let data = req.body
         let {name, email, mobile,collegeName} = data
         
-        name = name.trim()
-        email = email.trim()
-        collegeName = collegeName.trim()
-        
         //CHECKING IF ALL THE FIELDS PRESENT IN THE BODY---------------------------------
         if(Object.keys(data).length===0)  return res.status(400).send({status:false, msg : "cannot create data without any information"})
+        //KEY VALIDATION---------------------------------------------------------------
+        let keyArr = Object.keys(data)
+        for(let i=0;i<keyArr.length; i++){
+            keyArr[i]= keyArr[i].trim()
+            if(keyArr[i].length ===0){
+                return res.status(400).send({status:false, message:"please provide valid key"})
+            }
+        }
+
         if(!name)  return res.status(400).send({status:false, message : "Name is required"})
+        name = name.trim()
+
         if(!email) return res.status(400).send({status:false, message :"Email is required"})
+        email = email.trim()
+
         if(!mobile) return res.status(400).send({status:false, message :"Mobile number is required"})
+
         if(!collegeName) return res.status(400).send({status:false, message :"College name is required"})
+        collegeName = collegeName.trim()
+
         
         //VALIDATIONS USING REGEX--------------------------
         let validName = isValidName(name)
