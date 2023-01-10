@@ -10,13 +10,11 @@ const isValidNumber= function(invoice){
 
 const isValidEmail=function(email){
     const pattern =  /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-
-
     return  pattern.test(email)
 }
 
 const isValidNames = function (name) {
-    const nameRegex = /^[a-z]+$/;
+    const nameRegex = /^[a-zA-Z ]{1,30}$/;;
     return nameRegex.test(name)
 }
 
