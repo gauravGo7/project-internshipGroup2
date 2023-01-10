@@ -9,9 +9,6 @@ let createCollege = async function (req, res) {
         const data = req.body;
         let { name, fullName, logoLink } = data
 
-        name = name.trim()
-        fullName = fullName.trim()
-        logoLink = logoLink.trim()
 
         //CHECKING IF ALL THE FIELDS PRESENT IN THE BODY------------------------------
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "cannot create data without any information" })
@@ -21,13 +18,18 @@ let createCollege = async function (req, res) {
          for(let i=0;i<keyArr.length; i++){
              keyArr[i]= keyArr[i].trim()
              if(keyArr[i].length ===0){
-                 return res.status(400).send({status:false, message:"please provide valid key"})
+                 return res.status(400).send({status:false, message:"key cannot be empty"})
              }
          }
          
         if (!name) return res.status(400).send({ status: false, message: "Name is required" })
+        name = name.trim()
+
         if (!fullName) return res.status(400).send({ status: false, message: "Full name is required" })
+        fullName = fullName.trim()
+
         if (!logoLink) return res.status(400).send({ status: false, message: "Logo link is required" })
+        logoLink = logoLink.trim()
 
         //VALIDATIONS USING REGEX---------------------------------------------------------
         let validName = isValidNames(name)
@@ -38,9 +40,12 @@ let createCollege = async function (req, res) {
 
         let validLogoLink = isValidLogoLink(logoLink)
         if (!validLogoLink) return res.status(400).send({ status: false, message: "LogoLink is invalid" })
+
+        //IF COLLEGE ALREAY EXISTS
         let isfullName = await collegeModel.find({ fullName: fullName })
-        if (isfullName.length !== 0) return res.status(400).send({ status: false, message: "this college already exists" })
-        //CREATING COLLEGE----------------------------------------------------------
+        if (isfullName.length !== 0) return res.status(400).send({ status: false, message: "This college already exists" })
+
+        //CREATING COLLEGE IF COLLEGE DOES NOT EXISTS---------------------------------------------------------
         const newCollege = await collegeModel.create(data);
         res.status(201).send({ status: true, data: newCollege })
     }
@@ -55,7 +60,9 @@ let createCollege = async function (req, res) {
 const getCollege = async (req, res) => {
     try {
         let collegeName = req.query.collegeName
-        let college = await collegeModel.find({ name: collegeName })
+        if(!collegeName)  return res.status(400).send({status:false, message:"Please provide some query"})
+
+        let college = await collegeModel.find({ name: collegeName, isDeleted:false})
 
         if (college.length === 0) return res.status(400).send({ status: false, msg: "No such college exists in the DB" })
 
@@ -64,7 +71,7 @@ const getCollege = async (req, res) => {
         const fullName = college[0].fullName
         const logo = college[0].logoLink
 
-        let interns = await internModel.find({ collegeId: collegeId })
+        let interns = await internModel.find({ collegeId: collegeId, isDeleted:false})
         if (interns.length === 0) return res.send({ status: false, message: "No interns have applied for this college" })
 
         let internId = interns.map(el => el._id)

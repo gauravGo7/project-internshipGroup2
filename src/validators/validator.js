@@ -1,3 +1,7 @@
+const isValidName = function (name) {
+    const nameRegex = /^[a-z ,A-Z]+$/;
+    return nameRegex.test(name)
+}
 
 const isValidNumber= function(invoice){
     const nameRegex = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/
@@ -19,7 +23,7 @@ const isValidLogoLink = function (logoLink) {
     return correctLink.test(logoLink)
 }
 
-module.exports={isValidEmail,isValidName, isValidNumber , isValidNames,isValidLogoLink}
+module.exports={isValidName,isValidEmail, isValidNumber , isValidNames,isValidLogoLink}
 
 
 
