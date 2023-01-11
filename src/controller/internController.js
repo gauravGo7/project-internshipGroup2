@@ -1,6 +1,7 @@
 const internModel = require("../models/internModel")
 const collegeModel = require("../models/collegeModel")
 const {isValidName, isValidEmail, isValidNumber } = require("../validators/validator")
+const { default: mongoose } = require("mongoose")
 
 
 //==========================================================CREATING INTERNS===============================================================
@@ -54,7 +55,7 @@ let createIntern = async (req, res) => {
 
         //ADDING COLLEGE ID IN DATA USING COLLEGE NAME----------------------
 
-        let college = await collegeModel.find({ name: collegeName })
+        let college = await collegeModel.find({ name: collegeName, isDeleted:false })
 
         //IF NO SUCH COLLEGE EXISTS IN THE DB-----------------------------------
         if (college.length === 0) return res.status(400).send({ status: false, message: "No such college exists in the collection" })
@@ -73,6 +74,5 @@ let createIntern = async (req, res) => {
     }
 }
 module.exports.createIntern = createIntern
-
 
 
