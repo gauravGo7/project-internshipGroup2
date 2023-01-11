@@ -18,11 +18,11 @@ const internSchema = new mongoose.Schema(
             type : Number,
             require: true,
             unique : true,
-            trim : true,
          },
         collegeId:{
          type: String,
-         require: true
+         require: true,
+         
         },
          isDeleted : {
             type : Boolean,

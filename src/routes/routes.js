@@ -3,7 +3,7 @@ const router  = express.Router()
 const {createCollege, getCollege} = require("../controller/collegeController")
 const {createIntern} = require("../controller/internController")
 
-router.get("/test", (req, res)=>res.send("api"))
+
 
 
 router.post( "/functionup/colleges" , createCollege )
